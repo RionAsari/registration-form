@@ -6,13 +6,7 @@
     <title>Pendaftaran Reseller</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
 
-    <script>
-        // ⛔ Cegah akses ulang jika sudah daftar
-        if (localStorage.getItem("resellerRegistered") === "true") {
-            window.location.replace("terimakasih.html");
-        }
-    </script>
-
+    <!-- Firebase & Submit Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
@@ -54,7 +48,6 @@
                     return;
                 }
 
-                // Simpan data ke Firebase
                 const resellerRef = ref(database, 'reseller-form');
                 push(resellerRef, {
                     fullName,
@@ -64,10 +57,10 @@
                     postalCode,
                     timestamp: Date.now()
                 }).then(() => {
-                    localStorage.setItem("resellerRegistered", "true"); // Tandai sudah daftar
-                    window.location.replace("terimakasih.html"); // ⬅️ Ini kunci utamanya
+                    // Setelah berhasil submit, arahkan ke halaman terima kasih
+                    window.location.replace("terimakasih.html");
                 }).catch((error) => {
-                    alert("Gagal: " + error.message);
+                    alert("Gagal mengirim data: " + error.message);
                 });
             };
         });

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Reseller Terdaftar</title>
+</head>
+<body>
+    <h1>Data Reseller</h1>
+    <div id="reseller-list"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
+            authDomain: "reseller-form-a616f.firebaseapp.com",
+            databaseURL: "https://reseller-form-a616f-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "reseller-form-a616f",
+            storageBucket: "reseller-form-a616f.appspot.com",
+            messagingSenderId: "194922134187",
+            appId: "1:194922134187:web:6e2421004dc4ba580195ee",
+            measurementId: "G-NHLWZHWWEW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const resellerRef = ref(database, 'reseller-form');
+        const listDiv = document.getElementById('reseller-list');
+
+        onValue(resellerRef, (snapshot) => {
+            const data = snapshot.val();
+            if (!data) {
+                listDiv.innerHTML = "<p>Belum ada reseller terdaftar.</p>";
+                return;
+            }
+
+            listDiv.innerHTML = "";
+            Object.entries(data).forEach(([id, reseller]) => {
+                const el = document.createElement("div");
+                el.innerHTML = `
+                    <hr>
+                    <p><strong>Nama:</strong> ${reseller.fullName}</p>
+                    <p><strong>No. Telepon:</strong> ${reseller.phone}</p>
+                    <p><strong>Email:</strong> ${reseller.email}</p>
+                    <p><strong>Alamat:</strong> ${reseller.address}</p>
+                    <p><strong>Kode Pos:</strong> ${reseller.postalCode}</p>
+                `;
+                listDiv.appendChild(el);
+            });
+        });
+    </script>
+</body>
+</html>

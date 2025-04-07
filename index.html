@@ -25,14 +25,26 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById("register-form");
+
             form.onsubmit = (e) => {
                 e.preventDefault();
 
-                const fullName = document.getElementById("fullName").value;
-                const phone = document.getElementById("phone").value;
-                const email = document.getElementById("email").value;
-                const address = document.getElementById("address").value;
-                const postalCode = document.getElementById("postalCode").value;
+                const fullName = document.getElementById("fullName").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const address = document.getElementById("address").value.trim();
+                const postalCode = document.getElementById("postalCode").value.trim();
+
+                // Validasi angka
+                if (!/^\d+$/.test(phone)) {
+                    alert("Nomor telepon hanya boleh berisi angka.");
+                    return;
+                }
+
+                if (!/^\d+$/.test(postalCode)) {
+                    alert("Kode pos hanya boleh berisi angka.");
+                    return;
+                }
 
                 const resellerRef = ref(database, 'reseller-form');
                 push(resellerRef, {

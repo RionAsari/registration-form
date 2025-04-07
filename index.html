@@ -6,7 +6,6 @@
     <title>Pendaftaran Reseller</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
 
-    <!-- Firebase & Submit Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
@@ -37,7 +36,6 @@
                 const address = document.getElementById("address").value.trim();
                 const postalCode = document.getElementById("postalCode").value.trim();
 
-                // Validasi angka
                 if (!/^\d+$/.test(phone)) {
                     alert("Nomor telepon hanya boleh berisi angka.");
                     return;
@@ -57,7 +55,6 @@
                     postalCode,
                     timestamp: Date.now()
                 }).then(() => {
-                    // Setelah berhasil submit, arahkan ke halaman terima kasih
                     window.location.replace("terimakasih.html");
                 }).catch((error) => {
                     alert("Gagal mengirim data: " + error.message);

@@ -1,89 +1,93 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Pendaftaran Reseller</title>
-    <link href="css/main.css" rel="stylesheet" type="text/css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pendaftaran Reseller</title>
+  <link href="css/main.css" rel="stylesheet" type="text/css" />
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
-            authDomain: "reseller-form-a616f.firebaseapp.com",
-            databaseURL: "https://reseller-form-a616f-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "reseller-form-a616f",
-            storageBucket: "reseller-form-a616f.appspot.com",
-            messagingSenderId: "194922134187",
-            appId: "1:194922134187:web:6e2421004dc4ba580195ee",
-            measurementId: "G-NHLWZHWWEW"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
+      authDomain: "reseller-form-a616f.firebaseapp.com",
+      databaseURL: "https://reseller-form-a616f-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "reseller-form-a616f",
+      storageBucket: "reseller-form-a616f.appspot.com",
+      messagingSenderId: "194922134187",
+      appId: "1:194922134187:web:6e2421004dc4ba580195ee",
+      measurementId: "G-NHLWZHWWEW"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("register-form");
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("register-form");
 
-            form.onsubmit = (e) => {
-                e.preventDefault();
+      form.onsubmit = (e) => {
+        e.preventDefault();
 
-                const fullName = document.getElementById("fullName").value.trim();
-                const phone = document.getElementById("phone").value.trim();
-                const email = document.getElementById("email").value.trim();
-                const address = document.getElementById("address").value.trim();
-                const postalCode = document.getElementById("postalCode").value.trim();
+        const fullName = document.getElementById("fullName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const postalCode = document.getElementById("postalCode").value.trim();
 
-                if (!/^\d+$/.test(phone)) {
-                    alert("Nomor telepon hanya boleh berisi angka.");
-                    return;
-                }
+        if (!/^\d+$/.test(phone)) {
+          alert("Nomor telepon hanya boleh berisi angka.");
+          return;
+        }
 
-                if (!/^\d+$/.test(postalCode)) {
-                    alert("Kode pos hanya boleh berisi angka.");
-                    return;
-                }
+        if (!/^\d+$/.test(postalCode)) {
+          alert("Kode pos hanya boleh berisi angka.");
+          return;
+        }
 
-                const resellerRef = ref(database, 'reseller-form');
-                push(resellerRef, {
-                    fullName,
-                    phone,
-                    email,
-                    address,
-                    postalCode,
-                    timestamp: Date.now()
-                }).then(() => {
-                    window.location.replace("terimakasih.html");
-                }).catch((error) => {
-                    alert("Gagal mengirim data: " + error.message);
-                });
-            };
+        const resellerRef = ref(database, 'reseller-form');
+        push(resellerRef, {
+          fullName,
+          phone,
+          email,
+          address,
+          postalCode,
+          timestamp: Date.now()
+        }).then(() => {
+          window.location.replace("terimakasih.html");
+        }).catch((error) => {
+          alert("Gagal mengirim data: " + error.message);
         });
-    </script>
+      };
+    });
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h2>Formulir Pendaftaran Reseller</h2>
-        <form id="register-form">
-            <label for="fullName">Nama Lengkap:</label>
-            <input type="text" id="fullName" required><br><br>
-
-            <label for="phone">Nomor Telepon:</label>
-            <input type="number" id="phone" required inputmode="numeric" pattern="[0-9]+" /><br><br>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" required><br><br>
-
-            <label for="address">Alamat Domisili:</label>
-            <input type="text" id="address" required><br><br>
-
-            <label for="postalCode">Kode Pos:</label>
-            <input type="number" id="postalCode" required inputmode="numeric" pattern="[0-9]+" /><br><br>
-
-            <button class="submit-button" type="submit">Daftar</button>
-        </form>
+  <div class="container">
+    <div class="logo">
+      <img src="css/image.png" alt="Logo" />
     </div>
+    <div class="form-title">Formulir Pendaftaran Reseller</div>
+    <form class="form-container" id="register-form">
+
+      <label for="fullName">Nama Lengkap:</label>
+      <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required><br><br>
+
+      <label for="phone">Nomor Telepon:</label>
+      <input type="number" id="phone" inputmode="numeric" pattern="[0-9]+" placeholder="Contoh: 081234567890" required><br><br>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Contoh: rina@email.com" required><br><br>
+
+      <label for="address">Alamat Domisili:</label>
+      <input type="text" id="address" placeholder="Contoh: Jl. Mawar No. 9, Pasuruan" required><br><br>
+
+      <label for="postalCode">Kode Pos:</label>
+      <input type="number" id="postalCode" inputmode="numeric" pattern="[0-9]+" placeholder="Contoh: 67192" required><br><br>
+
+      <button class="submit-button" type="submit">Daftar</button>
+    </form>
+  </div>
 </body>
 </html>

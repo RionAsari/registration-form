@@ -55,8 +55,7 @@
                     postalCode,
                     timestamp: Date.now()
                 }).then(() => {
-                    alert("Pendaftaran berhasil!");
-                    form.reset();
+                    window.location.href = "terimakasih.html"; // ⬅️ Redirect ke halaman terima kasih
                 }).catch((error) => {
                     alert("Gagal: " + error.message);
                 });

@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Pendaftaran Reseller</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        // ⛔ Cek apakah user udah pernah daftar
+        if (localStorage.getItem("resellerRegistered") === "true") {
+            window.location.replace("blocked.html"); // ⬅️ Replace supaya gak bisa tekan Back
+        }
+    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
-        // Cegah akses ulang jika sudah pernah daftar
-        if (localStorage.getItem("resellerRegistered") === "true") {
-            window.location.replace("blocked.html"); // Atau redirect ke terimakasih.html
-        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
@@ -52,6 +54,7 @@
                     return;
                 }
 
+                // Push ke Firebase
                 const resellerRef = ref(database, 'reseller-form');
                 push(resellerRef, {
                     fullName,
@@ -61,8 +64,8 @@
                     postalCode,
                     timestamp: Date.now()
                 }).then(() => {
-                    localStorage.setItem("resellerRegistered", "true"); // ⬅️ Set flag pencegahan
-                    window.location.href = "terimakasih.html";
+                    localStorage.setItem("resellerRegistered", "true");
+                    window.location.replace("terimakasih.html"); // ⬅️ Supaya gak bisa di-back
                 }).catch((error) => {
                     alert("Gagal: " + error.message);
                 });

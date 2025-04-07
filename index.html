@@ -7,9 +7,9 @@
     <link href="css/main.css" rel="stylesheet" type="text/css" />
 
     <script>
-        // ⛔ Cek apakah user udah pernah daftar
+        // ⛔ Cegah akses ulang jika sudah daftar
         if (localStorage.getItem("resellerRegistered") === "true") {
-            window.location.replace("blocked.html"); // ⬅️ Replace supaya gak bisa tekan Back
+            window.location.replace("blocked.html"); // Ganti ke halaman terima kasih kalau mau
         }
     </script>
 
@@ -54,7 +54,7 @@
                     return;
                 }
 
-                // Push ke Firebase
+                // Simpan data ke Firebase
                 const resellerRef = ref(database, 'reseller-form');
                 push(resellerRef, {
                     fullName,
@@ -64,8 +64,8 @@
                     postalCode,
                     timestamp: Date.now()
                 }).then(() => {
-                    localStorage.setItem("resellerRegistered", "true");
-                    window.location.replace("terimakasih.html"); // ⬅️ Supaya gak bisa di-back
+                    localStorage.setItem("resellerRegistered", "true"); // Tandai sudah daftar
+                    window.location.replace("terimakasih.html"); // ⬅️ Ini kunci utamanya
                 }).catch((error) => {
                     alert("Gagal: " + error.message);
                 });

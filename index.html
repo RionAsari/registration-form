@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pendaftaran Reseller</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        // Cegah akses ulang jika sudah pernah daftar
+        if (localStorage.getItem("resellerRegistered") === "true") {
+            window.location.replace("blocked.html"); // Atau redirect ke terimakasih.html
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
@@ -55,7 +61,8 @@
                     postalCode,
                     timestamp: Date.now()
                 }).then(() => {
-                    window.location.href = "terimakasih.html"; // ⬅️ Redirect ke halaman terima kasih
+                    localStorage.setItem("resellerRegistered", "true"); // ⬅️ Set flag pencegahan
+                    window.location.href = "terimakasih.html";
                 }).catch((error) => {
                     alert("Gagal: " + error.message);
                 });

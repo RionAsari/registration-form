@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Reseller Terdaftar</title>
+    <title>Daftar Agent Terdaftar</title>
 </head>
 <body>
-    <h1>Data Reseller</h1>
-    <div id="reseller-list"></div>
+    <h1>Data Agent</h1>
+    <div id="agent-list"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -27,26 +27,26 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        const resellerRef = ref(database, 'reseller-form');
-        const listDiv = document.getElementById('reseller-list');
+        const agentRef = ref(database, 'agent-form');
+        const listDiv = document.getElementById('agent-list');
 
-        onValue(resellerRef, (snapshot) => {
+        onValue(agentRef, (snapshot) => {
             const data = snapshot.val();
             if (!data) {
-                listDiv.innerHTML = "<p>Belum ada reseller terdaftar.</p>";
+                listDiv.innerHTML = "<p>Belum ada agent terdaftar.</p>";
                 return;
             }
 
             listDiv.innerHTML = "";
-            Object.entries(data).forEach(([id, reseller]) => {
+            Object.entries(data).forEach(([id, agent]) => {
                 const el = document.createElement("div");
                 el.innerHTML = `
                     <hr>
-                    <p><strong>Nama:</strong> ${reseller.fullName}</p>
-                    <p><strong>No. Telepon:</strong> ${reseller.phone}</p>
-                    <p><strong>Email:</strong> ${reseller.email}</p>
-                    <p><strong>Alamat:</strong> ${reseller.address}</p>
-                    <p><strong>Kode Pos:</strong> ${reseller.postalCode}</p>
+                    <p><strong>Nama:</strong> ${agent.fullName}</p>
+                    <p><strong>No. Telepon:</strong> ${agent.phone}</p>
+                    <p><strong>Email:</strong> ${agent.email}</p>
+                    <p><strong>Alamat:</strong> ${agent.address}</p>
+                    <p><strong>Kode Pos:</strong> ${agent.postalCode}</p>
                 `;
                 listDiv.appendChild(el);
             });

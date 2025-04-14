@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pendaftaran Reseller</title>
+  <title>Pendaftaran Agent</title>
   <link href="css/main.css" rel="stylesheet" type="text/css" />
 
   <script type="module">
@@ -46,8 +46,8 @@
           return;
         }
 
-        const resellerRef = ref(database, 'reseller-form');
-        push(resellerRef, {
+        const agentRef = ref(database, 'agent-form');
+        push(agentRef, {
           fullName,
           phone,
           email,
@@ -68,7 +68,7 @@
     <div class="logo">
       <img src="css/image.png" alt="Logo" />
     </div>
-    <div class="form-title">Formulir Pendaftaran Reseller</div>
+    <div class="form-title">Formulir Pendaftaran Agent</div>
     <form class="form-container" id="register-form">
 
       <label for="fullName">Nama Lengkap:</label>

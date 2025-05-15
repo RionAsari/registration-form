@@ -64,6 +64,11 @@
       });
     };
 
+    window.goBack = function () {
+      document.getElementById("step2").style.display = "none";
+      document.getElementById("step1").style.display = "block";
+    };
+
     // Handle File Selection + Icon Change
     window.handleFileSelect = function(input, iconId) {
       const fileName = input.files[0]?.name || "Pilih File";
@@ -163,8 +168,9 @@
       </label>
       <input type="file" id="npwp" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'npwpIcon')">
 
-      <br><br>
-      <button onclick="submitAgentForm()">Kirim</button>
+<br><br>
+<button onclick="goBack()">← Kembali</button>
+<button onclick="submitAgentForm()">Kirim</button>
     </div>
   </div>
 </body>

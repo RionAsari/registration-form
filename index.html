@@ -28,7 +28,6 @@
 
     let agentKey = null;
 
-    // Step 1 → Step 2
     window.nextStep = function () {
       const fullName = document.getElementById("fullName").value.trim();
       const phone = document.getElementById("phone").value.trim();
@@ -69,15 +68,6 @@
       document.getElementById("step1").style.display = "block";
     };
 
-    // Handle File Selection + Icon Change
-    window.handleFileSelect = function(input, iconId) {
-      const fileName = input.files[0]?.name || "Pilih File";
-      const icon = document.getElementById(iconId);
-      icon.src = "Img_box_fill.png";
-      icon.parentElement.querySelector("span").textContent = fileName;
-    };
-
-    // Final Submit: Upload files
     window.submitAgentForm = function () {
       const ktpFile = document.getElementById("ktp").files[0];
       const kkFile = document.getElementById("kk").files[0];
@@ -105,19 +95,21 @@
   </script>
 
   <style>
-    .custom-file-label {
+    .file-input-container {
       display: flex;
       align-items: center;
       gap: 10px;
-      cursor: pointer;
       margin: 10px 0;
     }
-    .custom-file-label img {
+    .file-input-container img {
       width: 24px;
       height: 24px;
     }
-    .custom-file-label span {
+    .file-input-container span {
       font-size: 14px;
+    }
+    .file-input {
+      display: none;
     }
   </style>
 </head>
@@ -129,7 +121,7 @@
     </div>
     <div class="form-title">Formulir Pendaftaran Agen</div>
 
-    <!-- Step 1: Info Agen -->
+    <!-- Step 1 -->
     <div id="step1" style="display: block;">
       <label for="fullName">Nama Lengkap:</label>
       <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required><br><br>
@@ -149,29 +141,54 @@
       <button onclick="nextStep()">Lanjut</button>
     </div>
 
-    <!-- Step 2: Upload Dokumen -->
+    <!-- Step 2 -->
     <div id="step2" style="display: none;">
       <h3>Upload Dokumen</h3>
 
-      <label for="ktp" class="custom-file-label">
-        <img id="ktpIcon" src="icon.png"><span>Pilih File</span>
-      </label>
-      <input type="file" id="ktp" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'ktpIcon')">
+      <label>Unggah Foto KTP:</label>
+      <div class="file-input-container">
+        <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+        <span class="file-text">Pilih File</span>
+        <input type="file" id="ktp" accept="image/*" class="file-input">
+      </div>
 
-      <label for="kk" class="custom-file-label">
-        <img id="kkIcon" src="icon.png"><span>Pilih File</span>
-      </label>
-      <input type="file" id="kk" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'kkIcon')">
+      <label>Unggah Foto KK:</label>
+      <div class="file-input-container">
+        <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+        <span class="file-text">Pilih File</span>
+        <input type="file" id="kk" accept="image/*" class="file-input">
+      </div>
 
-      <label for="npwp" class="custom-file-label">
-        <img id="npwpIcon" src="icon.png"><span>Pilih File</span>
-      </label>
-      <input type="file" id="npwp" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'npwpIcon')">
+      <label>Unggah Foto NPWP:</label>
+      <div class="file-input-container">
+        <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+        <span class="file-text">Pilih File</span>
+        <input type="file" id="npwp" accept="image/*" class="file-input">
+      </div>
 
-<br><br>
-<button onclick="goBack()">← Kembali</button>
-<button onclick="submitAgentForm()">Kirim</button>
+      <br>
+      <button onclick="goBack()">← Kembali</button>
+      <button onclick="submitAgentForm()">Kirim</button>
     </div>
   </div>
+
+  <script>
+    // Ganti gambar dan teks saat file dipilih
+    document.querySelectorAll('.file-input').forEach(input => {
+      input.addEventListener('change', function () {
+        const container = this.closest('.file-input-container');
+        const icon = container.querySelector('.file-icon');
+        const text = container.querySelector('.file-text');
+
+        if (this.files && this.files.length > 0) {
+          icon.src = 'https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Img_box_fill.png';
+          text.textContent = this.files[0].name;
+        } else {
+          icon.src = 'https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png';
+          text.textContent = 'Pilih File';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

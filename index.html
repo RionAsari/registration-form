@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pendaftaran Agent</title>
+  <title>Pendaftaran Agen</title>
   <link href="css/main.css" rel="stylesheet" type="text/css" />
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytes } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
@@ -23,59 +24,113 @@
 
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
+    const storage = getStorage(app);
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("register-form");
+    let agentKey = null;
 
-      form.onsubmit = (e) => {
-        e.preventDefault();
+    // Step 1 → Step 2
+    window.nextStep = function () {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const postalCode = document.getElementById("postalCode").value.trim();
 
-        const fullName = document.getElementById("fullName").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const address = document.getElementById("address").value.trim();
-        const postalCode = document.getElementById("postalCode").value.trim();
+      if (!fullName || !phone || !email || !address || !postalCode) {
+        alert("Semua field wajib diisi.");
+        return;
+      }
+      if (!/^\d+$/.test(phone)) {
+        alert("Nomor telepon hanya boleh angka.");
+        return;
+      }
+      if (!/^\d+$/.test(postalCode)) {
+        alert("Kode pos hanya boleh angka.");
+        return;
+      }
 
-        if (!/^\d+$/.test(phone)) {
-          alert("Nomor telepon hanya boleh berisi angka.");
-          return;
-        }
+      const newRef = push(ref(database, "agent-form"));
+      agentKey = newRef.key;
+      set(newRef, {
+        fullName,
+        phone,
+        email,
+        address,
+        postalCode,
+        timestamp: Date.now()
+      }).then(() => {
+        document.getElementById("step1").style.display = "none";
+        document.getElementById("step2").style.display = "block";
+      });
+    };
 
-        if (!/^\d+$/.test(postalCode)) {
-          alert("Kode pos hanya boleh berisi angka.");
-          return;
-        }
+    // Handle File Selection + Icon Change
+    window.handleFileSelect = function(input, iconId) {
+      const fileName = input.files[0]?.name || "Pilih File";
+      const icon = document.getElementById(iconId);
+      icon.src = "Img_box_fill.png";
+      icon.parentElement.querySelector("span").textContent = fileName;
+    };
 
-        const agentRef = ref(database, 'agent-form');
-        push(agentRef, {
-          fullName,
-          phone,
-          email,
-          address,
-          postalCode,
-          timestamp: Date.now()
-        }).then(() => {
-          window.location.replace("terimakasih.html");
-        }).catch((error) => {
-          alert("Gagal mengirim data: " + error.message);
-        });
-      };
-    });
+    // Final Submit: Upload files
+    window.submitAgentForm = function () {
+      const ktpFile = document.getElementById("ktp").files[0];
+      const kkFile = document.getElementById("kk").files[0];
+      const npwpFile = document.getElementById("npwp").files[0];
+
+      if (!agentKey) {
+        alert("Data pribadi belum disimpan.");
+        return;
+      }
+
+      const basePath = `agent_docs/${agentKey}`;
+      const uploadTasks = [];
+
+      if (ktpFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/ktp.jpg`), ktpFile));
+      if (kkFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/kk.jpg`), kkFile));
+      if (npwpFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/npwp.jpg`), npwpFile));
+
+      Promise.all(uploadTasks).then(() => {
+        alert("Registrasi agen berhasil!");
+        window.location.href = "terimakasih.html";
+      }).catch((error) => {
+        alert("Gagal mengunggah dokumen: " + error.message);
+      });
+    };
   </script>
+
+  <style>
+    .custom-file-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    .custom-file-label img {
+      width: 24px;
+      height: 24px;
+    }
+    .custom-file-label span {
+      font-size: 14px;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container">
     <div class="logo">
       <img src="css/image.png" alt="Logo" />
     </div>
-    <div class="form-title">Formulir Pendaftaran Agent</div>
-    <form class="form-container" id="register-form">
+    <div class="form-title">Formulir Pendaftaran Agen</div>
 
+    <!-- Step 1: Info Agen -->
+    <div id="step1" style="display: block;">
       <label for="fullName">Nama Lengkap:</label>
       <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required><br><br>
 
       <label for="phone">Nomor Telepon:</label>
-      <input type="number" id="phone" inputmode="numeric" pattern="[0-9]+" placeholder="Contoh: 081234567890" required><br><br>
+      <input type="text" id="phone" placeholder="Contoh: 081234567890" required><br><br>
 
       <label for="email">Email:</label>
       <input type="email" id="email" placeholder="Contoh: rina@email.com" required><br><br>
@@ -84,10 +139,33 @@
       <input type="text" id="address" placeholder="Contoh: Jl. Mawar No. 9, Pasuruan" required><br><br>
 
       <label for="postalCode">Kode Pos:</label>
-      <input type="number" id="postalCode" inputmode="numeric" pattern="[0-9]+" placeholder="Contoh: 67192" required><br><br>
+      <input type="text" id="postalCode" placeholder="Contoh: 67192" required><br><br>
 
-      <button class="submit-button" type="submit">Daftar</button>
-    </form>
+      <button onclick="nextStep()">Lanjut</button>
+    </div>
+
+    <!-- Step 2: Upload Dokumen -->
+    <div id="step2" style="display: none;">
+      <h3>Upload Dokumen</h3>
+
+      <label for="ktp" class="custom-file-label">
+        <img id="ktpIcon" src="icon.png"><span>Pilih File</span>
+      </label>
+      <input type="file" id="ktp" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'ktpIcon')">
+
+      <label for="kk" class="custom-file-label">
+        <img id="kkIcon" src="icon.png"><span>Pilih File</span>
+      </label>
+      <input type="file" id="kk" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'kkIcon')">
+
+      <label for="npwp" class="custom-file-label">
+        <img id="npwpIcon" src="icon.png"><span>Pilih File</span>
+      </label>
+      <input type="file" id="npwp" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'npwpIcon')">
+
+      <br><br>
+      <button onclick="submitAgentForm()">Kirim</button>
+    </div>
   </div>
 </body>
 </html>

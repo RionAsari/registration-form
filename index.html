@@ -68,30 +68,53 @@
       document.getElementById("step1").style.display = "block";
     };
 
-    window.submitAgentForm = function () {
-      const ktpFile = document.getElementById("ktp").files[0];
-      const kkFile = document.getElementById("kk").files[0];
-      const npwpFile = document.getElementById("npwp").files[0];
+window.submitAgentForm = function () {
+  const ktpFile = document.getElementById("ktp").files[0];
+  const kkFile = document.getElementById("kk").files[0];
+  const npwpFile = document.getElementById("npwp").files[0];
 
-      if (!agentKey) {
-        alert("Data pribadi belum disimpan.");
-        return;
-      }
+  if (!agentKey) {
+    alert("Data pribadi belum disimpan.");
+    return;
+  }
 
-      const basePath = `agent_docs/${agentKey}`;
-      const uploadTasks = [];
+  const basePath = `agent_docs/${agentKey}`;
+  const uploads = [];
 
-      if (ktpFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/ktp.jpg`), ktpFile));
-      if (kkFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/kk.jpg`), kkFile));
-      if (npwpFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/npwp.jpg`), npwpFile));
+  // Fungsi bantu untuk upload dan ambil URL
+  function uploadAndGetURL(file, path) {
+    const fileRef = storageRef(storage, path);
+    return uploadBytes(fileRef, file)
+      .then(() => getDownloadURL(fileRef));
+  }
 
-      Promise.all(uploadTasks).then(() => {
-        alert("Registrasi agen berhasil!");
-        window.location.href = "terimakasih.html";
-      }).catch((error) => {
-        alert("Gagal mengunggah dokumen: " + error.message);
-      });
-    };
+  // Proses upload jika ada file
+  if (ktpFile) {
+    uploads.push(uploadAndGetURL(ktpFile, `${basePath}/ktp.jpg`).then(url => ({ ktp: url })));
+  }
+  if (kkFile) {
+    uploads.push(uploadAndGetURL(kkFile, `${basePath}/kk.jpg`).then(url => ({ kk: url })));
+  }
+  if (npwpFile) {
+    uploads.push(uploadAndGetURL(npwpFile, `${basePath}/npwp.jpg`).then(url => ({ npwp: url })));
+  }
+
+  Promise.all(uploads).then(results => {
+    // Gabungkan hasil URL menjadi satu objek
+    const fileData = Object.assign({}, ...results);
+    // Update data di database
+    return set(ref(database, `agent-form/${agentKey}`), {
+      ...fileData,
+      updatedAt: Date.now() // bisa hapus kalau gak perlu
+    });
+  }).then(() => {
+    alert("Registrasi agen berhasil!");
+    window.location.href = "terimakasih.html";
+  }).catch((error) => {
+    alert("Gagal mengunggah dokumen: " + error.message);
+  });
+};
+
   </script>
 
   <style>

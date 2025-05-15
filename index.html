@@ -169,11 +169,11 @@
 </div>
   </div>
 
-  <script>
-    // Ganti gambar dan teks saat file dipilih
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.file-input').forEach(input => {
-      input.addEventListener('change', function () {
-        const container = this.closest('.file-input-container');
+      input.addEventListener('change', function() {
+        const container = this.closest('.custom-file-label');
         const icon = container.querySelector('.file-icon');
         const text = container.querySelector('.file-text');
 
@@ -186,6 +186,8 @@
         }
       });
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>

@@ -8,7 +8,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import { getDatabase, ref, push, set, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
     import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
     const firebaseConfig = {
@@ -103,7 +103,7 @@ window.submitAgentForm = function () {
     // Gabungkan hasil URL menjadi satu objek
     const fileData = Object.assign({}, ...results);
     // Update data di database
-    return set(ref(database, `agent-form/${agentKey}`), {
+    return update(ref(database, `agent-form/${agentKey}`), {
       ...fileData,
       updatedAt: Date.now() // bisa hapus kalau gak perlu
     });

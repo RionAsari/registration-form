@@ -141,35 +141,32 @@
       <button onclick="nextStep()">Lanjut</button>
     </div>
 
-    <!-- Step 2 -->
-    <div id="step2" style="display: none;">
-      <h3>Upload Dokumen</h3>
+<!-- Step 2: Upload Dokumen -->
+<div id="step2" style="display: none;">
+  <h3>Upload Dokumen</h3>
 
-      <label>Unggah Foto KTP:</label>
-      <div class="file-input-container">
-        <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
-        <span class="file-text">Pilih File</span>
-        <input type="file" id="ktp" accept="image/*" class="file-input">
-      </div>
+  <label class="custom-file-label">
+    <input type="file" id="ktp" accept="image/*" class="file-input">
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
 
-      <label>Unggah Foto KK:</label>
-      <div class="file-input-container">
-        <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
-        <span class="file-text">Pilih File</span>
-        <input type="file" id="kk" accept="image/*" class="file-input">
-      </div>
+  <label class="custom-file-label">
+    <input type="file" id="kk" accept="image/*" class="file-input">
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
 
-      <label>Unggah Foto NPWP:</label>
-      <div class="file-input-container">
-        <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
-        <span class="file-text">Pilih File</span>
-        <input type="file" id="npwp" accept="image/*" class="file-input">
-      </div>
+  <label class="custom-file-label">
+    <input type="file" id="npwp" accept="image/*" class="file-input">
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
 
-      <br>
-      <button onclick="goBack()">← Kembali</button>
-      <button onclick="submitAgentForm()">Kirim</button>
-    </div>
+  <br><br>
+  <button onclick="goBack()">← Kembali</button>
+  <button onclick="submitAgentForm()">Kirim</button>
+</div>
   </div>
 
   <script>

@@ -2,19 +2,14 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pendaftaran Agen</title>
-  <link href="css/main.css" rel="stylesheet" />
-  <style>
-    .file-input-container { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-    .file-icon { width: 24px; height: 24px; }
-    .file-text { font-size: 14px; }
-    #upload-status-ktp { font-size: 14px; color: blue; margin-left: 32px; }
-  </style>
+  <link href="css/main.css" rel="stylesheet" type="text/css" />
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-    import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytes } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAsnbwmKyJaN9GA--95k_bhwTeYyoIkvE4",
@@ -31,134 +26,168 @@
     const database = getDatabase(app);
     const storage = getStorage(app);
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const ktpInput = document.getElementById('ktp');
-      const icon = document.querySelector('.file-icon');
-      const text = document.querySelector('.file-text');
+    let agentKey = null;
 
-      // Update UI saat pilih file
-      ktpInput.addEventListener('change', () => {
-        if (ktpInput.files && ktpInput.files.length > 0) {
+    window.nextStep = function () {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const postalCode = document.getElementById("postalCode").value.trim();
+
+      if (!fullName || !phone || !email || !address || !postalCode) {
+        alert("Semua field wajib diisi.");
+        return;
+      }
+      if (!/^\d+$/.test(phone)) {
+        alert("Nomor telepon hanya boleh angka.");
+        return;
+      }
+      if (!/^\d+$/.test(postalCode)) {
+        alert("Kode pos hanya boleh angka.");
+        return;
+      }
+
+      const newRef = push(ref(database, "agent-form"));
+      agentKey = newRef.key;
+      set(newRef, {
+        fullName,
+        phone,
+        email,
+        address,
+        postalCode,
+        timestamp: Date.now()
+      }).then(() => {
+        document.getElementById("step1").style.display = "none";
+        document.getElementById("step2").style.display = "block";
+      });
+    };
+
+    window.goBack = function () {
+      document.getElementById("step2").style.display = "none";
+      document.getElementById("step1").style.display = "block";
+    };
+
+    window.submitAgentForm = function () {
+      const ktpFile = document.getElementById("ktp").files[0];
+      const kkFile = document.getElementById("kk").files[0];
+      const npwpFile = document.getElementById("npwp").files[0];
+
+      if (!agentKey) {
+        alert("Data pribadi belum disimpan.");
+        return;
+      }
+
+      const basePath = `agent_docs/${agentKey}`;
+      const uploadTasks = [];
+
+      if (ktpFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/ktp.jpg`), ktpFile));
+      if (kkFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/kk.jpg`), kkFile));
+      if (npwpFile) uploadTasks.push(uploadBytes(storageRef(storage, `${basePath}/npwp.jpg`), npwpFile));
+
+      Promise.all(uploadTasks).then(() => {
+        alert("Registrasi agen berhasil!");
+        window.location.href = "terimakasih.html";
+      }).catch((error) => {
+        alert("Gagal mengunggah dokumen: " + error.message);
+      });
+    };
+  </script>
+
+  <style>
+    .file-input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .file-input-container img {
+      width: 24px;
+      height: 24px;
+    }
+    .file-input-container span {
+      font-size: 14px;
+    }
+    .file-input {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="css/image.png" alt="Logo" />
+    </div>
+    <div class="form-title">Formulir Pendaftaran Agen</div>
+
+    <!-- Step 1 -->
+    <div id="step1" style="display: block;">
+      <label for="fullName">Nama Lengkap:</label>
+      <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required><br><br>
+
+      <label for="phone">Nomor Telepon:</label>
+      <input type="text" id="phone" placeholder="Contoh: 081234567890" required><br><br>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Contoh: rina@email.com" required><br><br>
+
+      <label for="address">Alamat Domisili:</label>
+      <input type="text" id="address" placeholder="Contoh: Jl. Mawar No. 9, Pasuruan" required><br><br>
+
+      <label for="postalCode">Kode Pos:</label>
+      <input type="text" id="postalCode" placeholder="Contoh: 67192" required><br><br>
+
+      <button onclick="nextStep()">Lanjut</button>
+    </div>
+
+<!-- Step 2: Upload Dokumen -->
+<div id="step2" style="display: none;">
+  <h3>Upload Dokumen</h3>
+
+  <label class="custom-file-label">
+    <input type="file" id="ktp" accept="image/*" class="file-input">
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
+
+  <label class="custom-file-label">
+    <input type="file" id="kk" accept="image/*" class="file-input">
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
+
+  <label class="custom-file-label">
+    <input type="file" id="npwp" accept="image/*" class="file-input">
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
+
+  <br><br>
+  <button onclick="goBack()">Kembali</button>
+  <button onclick="submitAgentForm()">Kirim</button>
+</div>
+  </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.file-input').forEach(input => {
+      input.addEventListener('change', function() {
+        const container = this.closest('.custom-file-label');
+        const icon = container.querySelector('.file-icon');
+        const text = container.querySelector('.file-text');
+
+        if (this.files && this.files.length > 0) {
           icon.src = 'https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Img_box_fill.png';
-          text.textContent = ktpInput.files[0].name;
+          text.textContent = this.files[0].name;
         } else {
           icon.src = 'https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png';
           text.textContent = 'Pilih File';
         }
       });
-
-      document.getElementById('agent-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const fullName = document.getElementById('fullName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const postalCode = document.getElementById('postalCode').value.trim();
-
-        if (!fullName || !phone || !email) {
-          alert('Mohon isi semua data yang diperlukan.');
-          return;
-        }
-
-        const file = ktpInput.files[0];
-        const statusEl = document.getElementById('upload-status-ktp');
-
-        let ktpUrl = null;
-
-        if (file) {
-          if (file.size > 10 * 1024 * 1024) {
-            alert('File KTP terlalu besar, maksimal 10MB.');
-            return;
-          }
-
-          statusEl.textContent = "Mengunggah KTP...";
-          const ext = file.name.split('.').pop();
-          const uniqueName = `ktp_${Date.now()}.${ext}`;
-          const storageReference = storageRef(storage, 'agent-uploads/' + uniqueName);
-
-          try {
-            const uploadTask = uploadBytesResumable(storageReference, file);
-
-            // Tunggu upload selesai dan update progress
-            await new Promise((resolve, reject) => {
-              uploadTask.on('state_changed', (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                statusEl.textContent = `Mengunggah KTP... ${progress.toFixed(0)}%`;
-              }, (error) => {
-                statusEl.textContent = 'Gagal mengunggah ❌';
-                reject(error);
-              }, () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                  ktpUrl = downloadURL;
-                  statusEl.textContent = 'Upload selesai ✅';
-                  resolve();
-                }).catch(err => reject(err));
-              });
-            });
-          } catch(err) {
-            alert('Gagal upload file: ' + err.message);
-            statusEl.textContent = '';
-            return;
-          }
-        }
-
-        // Simpan data agent + url KTP ke database
-        const data = {
-          fullName,
-          phone,
-          email,
-          address,
-          postalCode,
-          ktpUrl: ktpUrl || null,
-          timestamp: Date.now()
-        };
-
-        try {
-          const agentRef = ref(database, 'agents');
-          await push(agentRef, data);
-          alert('Pendaftaran agen berhasil!');
-          document.getElementById('agent-form').reset();
-          statusEl.textContent = '';
-          icon.src = 'https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png';
-          text.textContent = 'Pilih File';
-        } catch (err) {
-          alert('Gagal menyimpan data: ' + err.message);
-          statusEl.textContent = '';
-        }
-      });
     });
-  </script>
-</head>
+  });
+</script>
 
-<body>
-  <h2>Pendaftaran Agen</h2>
-
-  <form id="agent-form">
-    <label>Nama Lengkap:</label><br>
-    <input type="text" id="fullName" required /><br><br>
-
-    <label>Nomor Telepon:</label><br>
-    <input type="tel" id="phone" required /><br><br>
-
-    <label>Email:</label><br>
-    <input type="email" id="email" required /><br><br>
-
-    <label>Alamat:</label><br>
-    <input type="text" id="address" /><br><br>
-
-    <label>Kode Pos:</label><br>
-    <input type="text" id="postalCode" maxlength="5" /><br><br>
-
-    <label>Unggah Foto KTP:</label><br>
-    <div class="file-input-container" style="width: 200px;">
-      <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon" alt="icon"/>
-      <span class="file-text">Pilih File</span>
-      <input type="file" id="ktp" accept="image/*" style="flex: 1;" />
-    </div>
-    <span id="upload-status-ktp"></span><br><br>
-
-    <button type="submit">Daftar</button>
-  </form>
 </body>
 </html>

@@ -7,21 +7,41 @@ body {
     background-repeat: no-repeat;
     min-height: 100vh;
     font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    overflow-y: auto;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0); /* transparan */
     width: 100%;
     max-width: 450px;
-    padding: 25px;
+    padding: 25px; /* dari contoh kamu */
     border-radius: 10px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0); /* shadow hilang */
     box-sizing: border-box;
     text-align: center;
     display: flex;
     flex-direction: column;
     margin: auto;
     margin-top: 30px;
+    max-height: 90vh; /* supaya container tidak terlalu tinggi */
+}
+
+.form-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    max-height: 420px;
+    overflow-y: auto;
+    text-align: left;
+    flex: 1;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
 }
 
 .logo {
@@ -38,28 +58,11 @@ body {
     height: auto;
 }
 
-.scrollable-form {
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 20px;
-    max-height: 420px;
-    overflow-y: auto;
-    text-align: left;
-    flex: 1;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    transition: box-shadow 0.3s ease;
-}
-
 .form-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
     text-align: center;
-}
-
-.form-container {
-    padding: 0;
-    margin: 0;
 }
 
 .form-container label {

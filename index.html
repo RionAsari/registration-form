@@ -60,14 +60,14 @@
       }).then(() => {
         document.getElementById("step1").style.display = "none";
         document.getElementById("step2").style.display = "block";
-        showStep(2);
+        updateProgress(2);
       });
     };
 
     window.goBack = function () {
       document.getElementById("step2").style.display = "none";
       document.getElementById("step1").style.display = "block";
-      showStep(1);
+      updateProgress(1);
     };
 
 window.submitAgentForm = function () {
@@ -115,30 +115,19 @@ window.submitAgentForm = function () {
   }).catch((error) => {
     alert("Gagal mengunggah dokumen: " + error.message);
   });
-  function showStep(n) {
-  const totalSteps = 2;
-  for (let i = 1; i <= totalSteps; i++) {
-    const box = document.getElementById(`step-box-${i}`);
-    const circle = document.getElementById(`circle-${i}`);
-    if (i < n) {
-      box.classList.add("completed");
-      box.classList.remove("active");
-      circle.textContent = "✔";
-    } else if (i === n) {
-      box.classList.add("active");
-      box.classList.remove("completed");
-      circle.textContent = i;
-    } else {
-      box.classList.remove("active", "completed");
-      circle.textContent = i;
-    }
-  }
-}
-
-// Panggil saat halaman pertama tampil
-showStep(1);
-
 };
+
+    function updateProgress(step) {
+      const steps = document.querySelectorAll(".progress-step");
+      steps.forEach((el, i) => {
+        el.classList.remove("progress-step-active", "progress-step-completed");
+        if (i + 1 < step) {
+          el.classList.add("progress-step-completed");
+        } else if (i + 1 === step) {
+          el.classList.add("progress-step-active");
+        }
+      });
+    }
 
   </script>
 
@@ -168,15 +157,11 @@ showStep(1);
       <img src="css/image.png" alt="Logo" />
     </div>
     <div class="form-title">Formulir Pendaftaran Agen</div>
-
-    <div class="step-container">
-  <div class="step" id="step-box-1">
-    <div class="circle" id="circle-1">1</div>
-  </div>
-  <div class="step" id="step-box-2">
-    <div class="circle" id="circle-2">2</div>
-  </div>
-</div>
+    
+        <div class="progressbar">
+      <div class="progress-step progress-step-active" data-step="1">Data Pribadi</div>
+      <div class="progress-step" data-step="2">Upload Dokumen</div>
+    </div>
 
     <!-- Step 1 -->
     <div id="step1" style="display: block;">

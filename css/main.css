@@ -128,27 +128,27 @@ p {
   width: 30px;
   height: 30px;
   line-height: 30px;
-  border: 3px solid #0E5C36;  /* outline hijau */
+  border: 3px solid #0E5C36;  /* border hijau */
   display: block;
   text-align: center;
   margin: 0 auto 10px auto;
   border-radius: 50%;
   background-color: white;
-  color: black;               /* nomor hitam */
+  color: black;           /* nomor hitam */
   font-weight: bold;
   z-index: 2;
   position: relative;
-  opacity: 0.45;              /* nomor transparan kalau belum aktif */
+  opacity: 0.45;          /* nomor transparan untuk step belum aktif */
   transition: all 0.3s ease;
 }
 .progress-step::after {
   content: '';
   position: absolute;
-  top: 50%;                   /* vertikal di tengah lingkaran */
-  left: 50%;                  /* mulai tepat di tengah lingkaran */
-  width: 100%;                /* penuh ke step selanjutnya */
+  top: 50%;            /* garis tepat sejajar tengah lingkaran */
+  left: 50%;           /* mulai dari tengah lingkaran */
+  width: calc(100% - 30px); /* lebar garis dikurangi diameter lingkaran, supaya garis tidak menusuk */
   height: 3px;
-  background-color: #bbb;     /* garis abu-abu default */
+  background-color: #bbb;  /* garis abu-abu default */
   z-index: 1;
   transform: translateY(-50%);
   transition: background-color 0.3s ease;

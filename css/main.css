@@ -133,10 +133,13 @@ body {
     font-size: 14px;
     color: #333;
 }
-.file-label-text {
+/* Buat agar label teks di step 2 mirip dengan step 1 */
+#step2.form-container label.file-label-text {
+  display: block;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
+
 
 .progressbar {
   display: flex;

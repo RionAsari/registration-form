@@ -107,3 +107,29 @@ p {
   font-size: 14px;
 }
 
+.step-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.step .circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step.active .circle {
+  background-color: #007bff;
+}
+
+.step.completed .circle {
+  background-color: #28a745;
+}
+

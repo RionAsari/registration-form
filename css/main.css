@@ -128,30 +128,29 @@ p {
   width: 30px;
   height: 30px;
   line-height: 30px;
-  border: 3px solid #0E5C36;  /* border hijau */
+  border: 3px solid #0E5C36;
   display: block;
   text-align: center;
   margin: 0 auto 10px auto;
   border-radius: 50%;
   background-color: white;
-  color: black;           /* nomor hitam */
+  color: rgba(0, 0, 0, 0.45); /* Angka transparan */
   font-weight: bold;
   z-index: 2;
   position: relative;
-  opacity: 0.45;          /* nomor transparan untuk step belum aktif */
   transition: all 0.3s ease;
 }
+
 .progress-step::after {
   content: '';
   position: absolute;
-  top: 50%;            /* garis tepat sejajar tengah lingkaran */
-  left: 50%;           /* mulai dari tengah lingkaran */
-  width: calc(100% - 30px); /* lebar garis dikurangi diameter lingkaran, supaya garis tidak menusuk */
+  top: 15px; /* TEPAT di tengah lingkaran 30px tinggi */
+  left: 50%;
+  width: 100%;
   height: 3px;
-  background-color: #bbb;  /* garis abu-abu default */
+  background-color: #bbb;
   z-index: 1;
-  transform: translateY(-50%);
-  transition: background-color 0.3s ease;
+  transform: translateX(0);
 }
     /* Remove line from first step */
     .progress-step:first-child::after {
@@ -159,22 +158,20 @@ p {
     }
     /* Active or completed step styling */
 .progress-step-active::before {
-  opacity: 1;
   color: black;
   border-color: #0E5C36;
   background-color: white;
 }
-
 /* Step selesai (completed) - lingkaran putih, centang hitam */
 .progress-step-completed::before {
-  background-color: white;
-  border-color: #0E5C36;
-  color: black;            /* centang warna hitam */
-  content: "✔";
+  content: '✔';
   font-size: 20px;
   line-height: 30px;
   font-weight: bold;
-  opacity: 1;
+  background-color: white;
+  border-color: #0E5C36;
+  color: black;
+  z-index: 2;
 }
 .progress-step-completed::before {
   content: "✔";

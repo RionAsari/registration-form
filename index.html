@@ -183,9 +183,7 @@ window.submitAgentForm = function () {
   <label for="postalCode">Kode Pos:</label>
   <input type="text" id="postalCode" placeholder="Contoh: 67192" required>
 
-      <div class="button-group"></div>
       <button onclick="nextStep()">Lanjut</button>
-      </div>
     </div>
 
 <!-- Step 2: Upload Dokumen -->
@@ -212,12 +210,11 @@ window.submitAgentForm = function () {
     <span class="file-text">Pilih File</span>
   </label>
 
-  <br><br>
-  <div class="button-group">
-  <button onclick="goBack()">Kembali</button>
-  <button onclick="submitAgentForm()">Kirim</button>
-</div>
+  <div class="button-group" style="margin-top: 30px;">
+    <button class="back-button" onclick="goBack()">Kembali</button>
+    <button id="submitBtn" onclick="submitAgentForm()">Kirim</button>
   </div>
+</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

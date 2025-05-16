@@ -163,10 +163,15 @@ p {
       color: #3f51b5;
       background-color: #e8eaf6;
     }
-    .progress-step-completed::before {
-      background-color: #3f51b5;
-      color: white;
-    }
+.progress-step-completed::before {
+  background-color: #3f51b5;
+  color: white;
+  content: "✔";  /* tambahkan ini */
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: bold;
+}
+
     .progress-step-active::after,
     .progress-step-completed::after {
       background-color: #3f51b5;

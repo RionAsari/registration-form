@@ -121,29 +121,26 @@ p {
   position: relative;
   text-align: center;
   flex: 1;
-  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 45px; /* Supaya teks ga nutupi lingkaran */
 }
 
-/* Garis antar step */
-.progress-step::after {
+/* Garis antar step (default abu-abu) */
+.progress-step:not(:last-child)::after {
   content: '';
   position: absolute;
   top: 15px;
   left: 50%;
   width: 100%;
   height: 4px;
-  background-color: rgba(0, 0, 0, 0.3); /* Default abu2 */
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 0;
   transform: translateX(0);
 }
 
-/* Hilangkan garis di step terakhir */
-.progress-step:last-child::after {
-  content: none;
-}
-
-/* Step sebelumnya yang completed, warnai garis ijo */
-.progress-step-completed::after {
+/* Step completed - garis jadi ijo */
+.progress-step.progress-step-active:not(:last-child)::after {
   background-color: #0E5C36;
 }
 
@@ -157,13 +154,16 @@ p {
   border: 2px solid #0E5C36;
   display: block;
   text-align: center;
-  margin: 0 auto 10px auto;
+  margin: 0 auto;
   border-radius: 50%;
   background-color: white;
   color: rgba(0, 0, 0, 0.45);
   font-weight: bold;
   z-index: 1;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   transition: all 0.3s ease;
 }
 

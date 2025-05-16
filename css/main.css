@@ -1,45 +1,39 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #00FF00;
-  margin: 0;
-  padding: 40px 0;
-  display: flex;
-  flex-direction: column; /* susun vertikal */
-  align-items: center;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-
-.logo {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-top: 10px;
-  flex-shrink: 0; /* supaya logo gak ikut mengecil */
-}
-
-.logo img {
-  width: 150px;
-  height: auto;
+    font-family: Arial, sans-serif;
+    background-color: #00FF00;
+    margin: 0;
+    padding: 40px 0; /* Jarak atas dan bawah */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Taruh konten di atas */
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 .container {
-  background-color: white;
-  width: 100%;
-  max-width: 450px;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
-  box-sizing: border-box;
-  text-align: center;
-
-  /* buat container scrollable jika isinya terlalu tinggi */
-  max-height: 80vh; /* maksimal tinggi 80% viewport height */
-  overflow-y: auto;
+    background-color: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    text-align: center;
 }
 
+.logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-top: 10px;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+}
 
 .form-title {
     font-size: 24px;

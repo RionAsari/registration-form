@@ -212,20 +212,9 @@ window.submitAgentForm = function () {
     <span class="file-text">Pilih File</span>
   </label>
 
-  <!-- Checkbox Pernyataan -->
-  <label style="display: flex; align-items: center; gap: 8px; line-height: 1.4; margin-top: 20px;">
-    <input type="checkbox" id="consent" style="accent-color: #0E5C36; transform: translateY(-1px);">
-    <span style="font-size: 12px;">
-      <span style="color: #000;">Dengan ini saya</span>
-      <span style="color: #0E5C36; font-weight: 500;">menyatakan data yang saya berikan benar adanya</span>
-      <span style="color: #000;">dan bersedia diproses</span>
-    </span>
-  </label>
-
-  <!-- Tombol Aksi -->
   <div class="button-group" style="margin-top: 30px;">
     <button class="back-button" onclick="goBack()">Kembali</button>
-    <button id="submitBtn" class="next-button" onclick="submitAgentForm()" disabled>Daftar</button>
+    <button id="submitBtn" onclick="submitAgentForm()">Kirim</button>
   </div>
 </div>
 

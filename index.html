@@ -164,36 +164,25 @@ window.submitAgentForm = function () {
 </div>
 
 
-<!-- Step 1, contoh untuk tiap input dibungkus div.input-box -->
-<div id="step1" style="display: block;">
+    <!-- Step 1 -->
+<div id="step1" class="form-container">
   <label for="fullName">Nama Lengkap:</label>
-  <div class="input-box">
-    <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required>
-  </div>
+  <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required>
 
   <label for="phone">Nomor Telepon:</label>
-  <div class="input-box">
-    <input type="text" id="phone" placeholder="Contoh: 081234567890" required>
-  </div>
+  <input type="text" id="phone" placeholder="Contoh: 081234567890" required>
 
   <label for="email">Email:</label>
-  <div class="input-box">
-    <input type="email" id="email" placeholder="Contoh: rina@email.com" required>
-  </div>
+  <input type="email" id="email" placeholder="Contoh: rina@email.com" required>
 
   <label for="address">Alamat Domisili:</label>
-  <div class="input-box">
-    <input type="text" id="address" placeholder="Contoh: Jl. Mawar No. 9, Pasuruan" required>
-  </div>
+  <input type="text" id="address" placeholder="Contoh: Jl. Mawar No. 9, Pasuruan" required>
 
   <label for="postalCode">Kode Pos:</label>
-  <div class="input-box">
-    <input type="text" id="postalCode" placeholder="Contoh: 67192" required>
-  </div>
+  <input type="text" id="postalCode" placeholder="Contoh: 67192" required>
 
-  <button onclick="nextStep()">Lanjut</button>
-</div>
-
+      <button onclick="nextStep()">Lanjut</button>
+    </div>
 
 <!-- Step 2: Upload Dokumen -->
 <div id="step2" style="display: none;">

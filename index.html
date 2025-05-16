@@ -188,33 +188,27 @@ window.submitAgentForm = function () {
 
 <!-- Step 2: Upload Dokumen -->
 <div id="step2" style="display: none;">
-
-  <label>Unggah Foto KTP:</label>
-  <div class="file-input-container">
-    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
-    <span class="file-text">Pilih File</span>
+  
+  <div class="file-label-text">Unggah Foto KTP</div>
+  <label class="custom-file-label">
     <input type="file" id="ktp" accept="image/*" class="file-input">
-  </div>
-  <span id="upload-status-ktp" style="font-size: 14px; color: blue;"></span><br><br>
-
-  <label>Unggah Foto KK:</label>
-  <div class="file-input-container">
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
+  </label>
+
+  <div class="file-label-text">Unggah Foto KK</div>
+  <label class="custom-file-label">
     <input type="file" id="kk" accept="image/*" class="file-input">
-  </div>
-  <span id="upload-status-kk" style="font-size: 14px; color: blue;"></span><br><br>
-
-  <label>Unggah Foto NPWP:</label>
-  <div class="file-input-container">
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
+  </label>
+
+  <div class="file-label-text">Unggah Foto NPWP</div>
+  <label class="custom-file-label">
     <input type="file" id="npwp" accept="image/*" class="file-input">
-  </div>
-  <span id="upload-status-npwp" style="font-size: 14px; color: blue;"></span><br><br>
-
-</div>
-
+    <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
+    <span class="file-text">Pilih File</span>
+  </label>
 
   <br><br>
   <button onclick="goBack()">Kembali</button>

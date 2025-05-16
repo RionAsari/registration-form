@@ -107,50 +107,50 @@ p {
   font-size: 14px;
 }
 .progressbar {
-      display: flex;
-      justify-content: space-between;
-      margin: 30px 0 40px 0;
-      counter-reset: step;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    /* Each step circle */
-    .progress-step {
-      position: relative;
-      text-align: center;
-      flex: 1;
-      cursor: pointer;
-    }
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0 40px 0;
+  counter-reset: step;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.progress-step {
+  position: relative;
+  text-align: center;
+  flex: 1;
+  cursor: pointer;
+}
 .progress-step::before {
   content: counter(step);
   counter-increment: step;
   width: 30px;
   height: 30px;
   line-height: 30px;
-  border: 3px solid #0E5C36;  /* outline warna hijau */
+  border: 3px solid #0E5C36;  /* outline hijau */
   display: block;
   text-align: center;
   margin: 0 auto 10px auto;
   border-radius: 50%;
-  background-color: white;  /* dasar putih */
-  color: #0E5C36;            /* default warna nomor hijau */
+  background-color: white;
+  color: black;               /* nomor hitam */
   font-weight: bold;
-  z-index: 1;
+  z-index: 2;
   position: relative;
+  opacity: 0.45;              /* nomor transparan kalau belum aktif */
   transition: all 0.3s ease;
-  opacity: 0.45;             /* default opacity 0.45 untuk step belum aktif */
 }
-    /* Line between steps */
 .progress-step::after {
   content: '';
   position: absolute;
-  width: 100%;
+  top: 50%;                   /* vertikal di tengah lingkaran */
+  left: 50%;                  /* mulai tepat di tengah lingkaran */
+  width: 100%;                /* penuh ke step selanjutnya */
   height: 3px;
-  background-color: #0E5C36;  /* garis warna hijau */
-  top: 15px;
-  left: -50%;
-  z-index: 0;
+  background-color: #bbb;     /* garis abu-abu default */
+  z-index: 1;
+  transform: translateY(-50%);
   transition: background-color 0.3s ease;
 }
     /* Remove line from first step */
@@ -159,10 +159,10 @@ p {
     }
     /* Active or completed step styling */
 .progress-step-active::before {
+  opacity: 1;
+  color: black;
   border-color: #0E5C36;
-  color: #0E5C36;
-  background-color: white;  /* tetap putih */
-  opacity: 1;               /* full opacity */
+  background-color: white;
 }
 
 /* Step selesai (completed) - lingkaran putih, centang hitam */
@@ -177,12 +177,14 @@ p {
   opacity: 1;
 }
 .progress-step-completed::before {
-  background-color: #3f51b5;
-  color: white;
-  content: "✔";  /* tambahkan ini */
+  content: "✔";
   font-size: 20px;
   line-height: 30px;
   font-weight: bold;
+  background-color: white;
+  border-color: #0E5C36;
+  color: black;
+  opacity: 1;
 }
 
 .progress-step-active::after,

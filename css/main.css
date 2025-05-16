@@ -140,7 +140,7 @@ p {
 }
 
 /* Step completed - garis jadi ijo */
-.progress-step.progress-step-active:not(:last-child)::after {
+.progress-step.progress-step-completed:not(:last-child)::after {
   background-color: #0E5C36;
 }
 

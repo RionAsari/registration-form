@@ -133,6 +133,11 @@ body {
     font-size: 14px;
     color: #333;
 }
+.file-label-text {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
 .progressbar {
   display: flex;
   justify-content: space-between;

@@ -27,6 +27,13 @@
     const storage = getStorage(app);
 
     let agentKey = null;
+function getFormattedDate() {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = now.getFullYear();
+  return `${day}-${month}-${year}`;
+}
 
 window.nextStep = function () {
   const fields = [
@@ -87,14 +94,15 @@ window.nextStep = function () {
 
   const newRef = push(ref(database, "agent-form"));
   agentKey = newRef.key;
-  set(newRef, {
+    set(newRef, {
     fullName,
     phone,
     email,
     address,
     postalCode,
-    timestamp: Date.now()
-  }).then(() => {
+    tanggal: getFormattedDate()
+  })
+.then(() => {
     document.getElementById("step1").style.display = "none";
     document.getElementById("step2").style.display = "block";
     updateProgress(2);
@@ -137,10 +145,10 @@ window.submitAgentForm = function () {
 
   Promise.all(uploads).then(results => {
     const fileData = Object.assign({}, ...results);
-    return update(ref(database, `agent-form/${agentKey}`), {
-      ...fileData,
-      updatedAt: Date.now()
-    });
+     return update(ref(database, `agent-form/${agentKey}`), {
+    ...fileData
+  });
+
   }).then(() => {
     alert("Registrasi agen berhasil!");
     window.location.href = "terimakasih.html";

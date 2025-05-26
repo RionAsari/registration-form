@@ -287,9 +287,8 @@ body {
     color: red !important;
   }
 
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin-top: 2px; /* <== Lebih dekat ke border */
-  line-height: 1.2;
-}
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 1px;
+  }

@@ -76,7 +76,7 @@ body {
 .form-container button {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     box-sizing: border-box;
     font-size: 14px;
 }
@@ -291,5 +291,5 @@ body {
   color: red;
   font-size: 12px;
   margin-top: 4px;
-  margin-bottom: 10px; 
+  margin-bottom: 12px; 
 }

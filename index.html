@@ -28,106 +28,78 @@
 
     let agentKey = null;
 
-    window.nextStep = function () {
-      const fullName = document.getElementById("fullName").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const postalCode = document.getElementById("postalCode").value.trim();
+window.nextStep = function () {
+  const fields = [
+    { id: "fullName", label: "Nama Lengkap" },
+    { id: "phone", label: "Nomor Telepon" },
+    { id: "email", label: "Email" },
+    { id: "address", label: "Alamat Domisili" },
+    { id: "postalCode", label: "Kode Pos" }
+  ];
 
-      if (!fullName || !phone || !email || !address || !postalCode) {
-        alert("Semua field wajib diisi.");
-        return;
-      }
-      if (!/^\d+$/.test(phone)) {
-        alert("Nomor telepon hanya boleh angka.");
-        return;
-      }
-      if (!/^\d+$/.test(postalCode)) {
-        alert("Kode pos hanya boleh angka.");
-        return;
-      }
+  let valid = true;
 
-      const newRef = push(ref(database, "agent-form"));
-      agentKey = newRef.key;
-      set(newRef, {
-        fullName,
-        phone,
-        email,
-        address,
-        postalCode,
-        timestamp: Date.now()
-      }).then(() => {
-        document.getElementById("step1").style.display = "none";
-        document.getElementById("step2").style.display = "block";
-        updateProgress(2);
-      });
-    };
+  fields.forEach(({ id, label }) => {
+    const input = document.getElementById(id);
+    const inputLabel = document.querySelector(`label[for="${id}"]`);
 
-    window.goBack = function () {
-      document.getElementById("step2").style.display = "none";
-      document.getElementById("step1").style.display = "block";
-      updateProgress(1);
-    };
+    input.classList.remove("input-error");
+    if (inputLabel) inputLabel.classList.remove("label-error");
 
-window.submitAgentForm = function () {
-  const ktpFile = document.getElementById("ktp").files[0];
-  const kkFile = document.getElementById("kk").files[0];
-  const npwpFile = document.getElementById("npwp").files[0];
+    // Hapus pesan error sebelumnya jika ada
+    const prevError = input.nextElementSibling;
+    if (prevError && prevError.classList.contains("error-message")) {
+      prevError.remove();
+    }
 
-  if (!agentKey) {
-    alert("Data pribadi belum disimpan.");
-    return;
-  }
+    // Validasi kosong
+    if (!input.value.trim()) {
+      valid = false;
+      input.classList.add("input-error");
+      if (inputLabel) inputLabel.classList.add("label-error");
 
-  const basePath = `agent_docs/${agentKey}`;
-  const uploads = [];
+      const error = document.createElement("div");
+      error.className = "error-message";
+      error.innerText = `${label} wajib diisi`;
+      input.insertAdjacentElement("afterend", error);
+    }
 
-  // Fungsi bantu untuk upload dan ambil URL
-  function uploadAndGetURL(file, path) {
-    const fileRef = storageRef(storage, path);
-    return uploadBytes(fileRef, file)
-      .then(() => getDownloadURL(fileRef));
-  }
+    // Validasi angka (khusus phone dan postalCode)
+    if ((id === "phone" || id === "postalCode") && input.value.trim() && !/^\d+$/.test(input.value)) {
+      valid = false;
+      input.classList.add("input-error");
+      if (inputLabel) inputLabel.classList.add("label-error");
 
-  // Proses upload jika ada file
-  if (ktpFile) {
-    uploads.push(uploadAndGetURL(ktpFile, `${basePath}/ktp.jpg`).then(url => ({ ktp: url })));
-  }
-  if (kkFile) {
-    uploads.push(uploadAndGetURL(kkFile, `${basePath}/kk.jpg`).then(url => ({ kk: url })));
-  }
-  if (npwpFile) {
-    uploads.push(uploadAndGetURL(npwpFile, `${basePath}/npwp.jpg`).then(url => ({ npwp: url })));
-  }
+      const error = document.createElement("div");
+      error.className = "error-message";
+      error.innerText = `${label} hanya boleh angka`;
+      input.insertAdjacentElement("afterend", error);
+    }
+  });
 
-  Promise.all(uploads).then(results => {
-    // Gabungkan hasil URL menjadi satu objek
-    const fileData = Object.assign({}, ...results);
-    // Update data di database
-    return update(ref(database, `agent-form/${agentKey}`), {
-      ...fileData,
-      updatedAt: Date.now() // bisa hapus kalau gak perlu
-    });
+  if (!valid) return;
+
+  const fullName = document.getElementById("fullName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const postalCode = document.getElementById("postalCode").value.trim();
+
+  const newRef = push(ref(database, "agent-form"));
+  agentKey = newRef.key;
+  set(newRef, {
+    fullName,
+    phone,
+    email,
+    address,
+    postalCode,
+    timestamp: Date.now()
   }).then(() => {
-    alert("Registrasi agen berhasil!");
-    window.location.href = "terimakasih.html";
-  }).catch((error) => {
-    alert("Gagal mengunggah dokumen: " + error.message);
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+    updateProgress(2);
   });
 };
-
-    function updateProgress(step) {
-      const steps = document.querySelectorAll(".progress-step");
-      steps.forEach((el, i) => {
-        el.classList.remove("progress-step-active", "progress-step-completed");
-        if (i + 1 < step) {
-          el.classList.add("progress-step-completed");
-        } else if (i + 1 === step) {
-          el.classList.add("progress-step-active");
-        }
-      });
-    }
 
   </script>
 
@@ -166,7 +138,6 @@ window.submitAgentForm = function () {
 </div>
 
 
-    <!-- Step 1 -->
 <div id="step1" class="form-container">
   <label for="fullName">Nama Lengkap:</label>
   <input type="text" id="fullName" placeholder="Contoh: Rina Sari" required>
@@ -188,7 +159,6 @@ window.submitAgentForm = function () {
   </div>
     </div>
 
-<!-- Step 2: Upload Dokumen -->
 <div id="step2" class="form-container" style="display: none;">
     <p style="color: #0E5C36; margin-bottom: 20px; font-size: 12px;">
     Untuk Proses Verifikasi Yang Lebih Cepat Mohon Lampirkan Data Berikut :<br>
@@ -215,8 +185,6 @@ window.submitAgentForm = function () {
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
   </label>
-
-  <!-- Checkbox Pernyataan -->
   <label style="display: flex; align-items: center; gap: 8px; line-height: 1.4; margin-top: 20px;">
     <input type="checkbox" id="consent" style="accent-color: #0E5C36; transform: translateY(-1px);">
     <span style="font-size: 12px;">
@@ -225,8 +193,6 @@ window.submitAgentForm = function () {
       <span style="color: #000;">dan bersedia diproses</span>
     </span>
   </label>
-
-  <!-- Tombol Aksi -->
   <div class="button-group" style="margin-top: 30px;">
     <button class="back-button" onclick="goBack()">Kembali</button>
     <button id="submitBtn" class="next-button" onclick="submitAgentForm()" disabled>Daftar</button>

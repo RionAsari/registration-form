@@ -279,3 +279,16 @@ body {
     width: auto; 
     margin-left: auto; 
 }
+ .input-error {
+    border-color: red !important;
+  }
+
+  .label-error {
+    color: red !important;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }

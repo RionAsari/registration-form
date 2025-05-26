@@ -275,7 +275,7 @@ function updateProgress(step) {
     </p>
     <div class="popup-buttons">
       <button id="checkAgainBtn" class="back-button">Cek Ulang</button>
-      <button id="submitBtn" class="next-button" disabled>Daftar</button>
+      <button id="confirmSubmitBtn" class="next-button">Daftar</button>
     </div>
   </div>
 </div>
@@ -306,26 +306,27 @@ function updateProgress(step) {
     });
     });
   });
-  document.addEventListener("DOMContentLoaded", () => {
-    const submitBtn = document.getElementById("submitBtn");
-    const confirmationPopup = document.getElementById("confirmationPopup");
-    const checkAgainBtn = document.getElementById("checkAgainBtn");
-    const confirmSubmitBtn = document.getElementById("confirmSubmitBtn");
+document.addEventListener("DOMContentLoaded", () => {
+  const submitBtn = document.getElementById("submitBtn"); // tombol di form step 2
+  const confirmationPopup = document.getElementById("confirmationPopup");
+  const checkAgainBtn = document.getElementById("checkAgainBtn");
+  const confirmSubmitBtn = document.getElementById("confirmSubmitBtn"); // tombol di popup
 
-    submitBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      confirmationPopup.classList.remove("hidden");
-    });
-
-    checkAgainBtn.addEventListener("click", () => {
-      confirmationPopup.classList.add("hidden");
-    });
-
-    confirmSubmitBtn.addEventListener("click", () => {
-      confirmationPopup.classList.add("hidden");
-      submitAgentForm();
-    });
+  submitBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    confirmationPopup.classList.remove("hidden");
   });
+
+  checkAgainBtn.addEventListener("click", () => {
+    confirmationPopup.classList.add("hidden");
+  });
+
+  confirmSubmitBtn.addEventListener("click", () => {
+    confirmationPopup.classList.add("hidden");
+    submitAgentForm();
+  });
+});
+
 </script>
 
 </body>

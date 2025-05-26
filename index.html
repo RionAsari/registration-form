@@ -101,65 +101,6 @@ window.nextStep = function () {
   });
 };
 
-window.goBack = function () {
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("step1").style.display = "block";
-  updateProgress(1);
-};
-
-window.submitAgentForm = function () {
-  const ktpFile = document.getElementById("ktp").files[0];
-  const kkFile = document.getElementById("kk").files[0];
-  const npwpFile = document.getElementById("npwp").files[0];
-
-  if (!agentKey) {
-    alert("Data pribadi belum disimpan.");
-    return;
-  }
-
-  const basePath = `agent_docs/${agentKey}`;
-  const uploads = [];
-
-  function uploadAndGetURL(file, path) {
-    const fileRef = storageRef(storage, path);
-    return uploadBytes(fileRef, file).then(() => getDownloadURL(fileRef));
-  }
-
-  if (ktpFile) {
-    uploads.push(uploadAndGetURL(ktpFile, `${basePath}/ktp.jpg`).then(url => ({ ktp: url })));
-  }
-  if (kkFile) {
-    uploads.push(uploadAndGetURL(kkFile, `${basePath}/kk.jpg`).then(url => ({ kk: url })));
-  }
-  if (npwpFile) {
-    uploads.push(uploadAndGetURL(npwpFile, `${basePath}/npwp.jpg`).then(url => ({ npwp: url })));
-  }
-
-  Promise.all(uploads).then(results => {
-    const fileData = Object.assign({}, ...results);
-    return update(ref(database, `agent-form/${agentKey}`), {
-      ...fileData,
-      updatedAt: Date.now()
-    });
-  }).then(() => {
-    alert("Registrasi agen berhasil!");
-    window.location.href = "terimakasih.html";
-  }).catch((error) => {
-    alert("Gagal mengunggah dokumen: " + error.message);
-  });
-};
-//njir
-function updateProgress(step) {
-  const steps = document.querySelectorAll(".progress-step");
-  steps.forEach((el, i) => {
-    el.classList.remove("progress-step-active", "progress-step-completed");
-    if (i + 1 < step) {
-      el.classList.add("progress-step-completed");
-    } else if (i + 1 === step) {
-      el.classList.add("progress-step-active");
-    }
-  });
-}
 
   </script>
 

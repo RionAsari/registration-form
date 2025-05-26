@@ -148,7 +148,6 @@ window.submitAgentForm = function () {
      return update(ref(database, `agent-form/${agentKey}`), {
     ...fileData
   });
-
   }).then(() => {
     alert("Registrasi agen berhasil!");
     window.location.href = "terimakasih.html";
@@ -167,6 +166,7 @@ function updateProgress(step) {
       el.classList.add("progress-step-active");
     }
   });
+  
 }
 
 
@@ -266,6 +266,20 @@ function updateProgress(step) {
     <button class="back-button" onclick="goBack()">Kembali</button>
     <button id="submitBtn" class="next-button" onclick="submitAgentForm()" disabled>Daftar</button>
   </div>
+  <div id="confirmationPopup" class="popup-overlay hidden">
+  <div class="popup-box">
+    <h2 class="popup-header">Daftar Sekarang?</h2>
+    <p class="popup-text">
+      Pastikan data yang Sahabat isi sudah benar. <br />
+      Pendaftaran yang sudah dikirim tidak dapat diubah.
+    </p>
+    <div class="popup-buttons">
+      <button id="checkAgainBtn" class="back-button">Cek Ulang</button>
+      <button id="confirmSubmitBtn" class="next-button">Daftar Sekarang</button>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -290,6 +304,26 @@ function updateProgress(step) {
     consentCheckbox.addEventListener("change", function () {
       submitBtn.disabled = !this.checked;
     });
+    });
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.getElementById("submitBtn");
+    const confirmationPopup = document.getElementById("confirmationPopup");
+    const checkAgainBtn = document.getElementById("checkAgainBtn");
+    const confirmSubmitBtn = document.getElementById("confirmSubmitBtn");
+
+    submitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      confirmationPopup.classList.remove("hidden");
+    });
+
+    checkAgainBtn.addEventListener("click", () => {
+      confirmationPopup.classList.add("hidden");
+    });
+
+    confirmSubmitBtn.addEventListener("click", () => {
+      confirmationPopup.classList.add("hidden");
+      submitAgentForm();
     });
   });
 </script>

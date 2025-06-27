@@ -142,7 +142,7 @@ window.goBack = function () {
   updateProgress(1);
 };
 
-window.submitAgentForm = function () {
+window.submitAgentForm = async function () {
   const ktpFile = document.getElementById("ktp").files[0];
   const kkFile = document.getElementById("kk").files[0];
   const npwpFile = document.getElementById("npwp").files[0];
@@ -151,6 +151,72 @@ window.submitAgentForm = function () {
     alert("Data pribadi belum disimpan.");
     return;
   }
+
+  document.getElementById("loading").style.display = "block";
+
+  const fileFields = [
+    { id: 'ktp', file: ktpFile },
+    { id: 'kk', file: kkFile },
+    { id: 'npwp', file: npwpFile },
+  ];
+
+  const uploads = {};
+  
+  for (const { id, file } of fileFields) {
+    const statusEl = document.getElementById(`upload-status-${id}`);
+    if (!file) continue;
+
+    if (file.size > 1 * 1024 * 1024) {
+      statusEl.textContent = "Ukuran file terlalu besar ❌";
+      document.getElementById("loading").style.display = "none";
+      return;
+    }
+
+    statusEl.textContent = "Mengunggah...";
+    const ext = file.name.split('.').pop();
+    const uniqueName = `${id}_${Date.now()}.${ext}`;
+    const storagePath = `agent_docs/${agentKey}/${uniqueName}`;
+    const fileRef = storageRef(storage, storagePath);
+
+    try {
+      const uploadTask = uploadBytesResumable(fileRef, file);
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            statusEl.textContent = `Mengunggah... ${progress.toFixed(0)}%`;
+          },
+          (error) => {
+            statusEl.textContent = "Gagal ❌";
+            reject(error);
+          },
+          async () => {
+            const url = await getDownloadURL(fileRef);
+            uploads[id] = url;
+            statusEl.textContent = "Selesai ✅";
+            resolve();
+          }
+        );
+      });
+    } catch (error) {
+      alert(`Gagal mengunggah ${id}: ${error.message}`);
+      document.getElementById("loading").style.display = "none";
+      return;
+    }
+  }
+
+  try {
+    await update(ref(database, `agent-form/${agentKey}`), uploads);
+    alert("Registrasi agen berhasil!");
+    window.location.href = "terimakasih.html";
+  } catch (error) {
+    alert("Gagal menyimpan data: " + error.message);
+  } finally {
+    document.getElementById("loading").style.display = "none";
+  }
+};
+
 
   const basePath = `agent_docs/${agentKey}`;
   const uploads = [];
@@ -181,7 +247,6 @@ window.submitAgentForm = function () {
   }).catch((error) => {
     alert("Gagal mengunggah dokumen: " + error.message);
   });
-};
 
 function updateProgress(step) {
   const steps = document.querySelectorAll(".progress-step");
@@ -233,6 +298,7 @@ function updateProgress(step) {
   <div class="progress-step" data-step="2"></div>
 </div>
 
+<div id="loading" style="display:none; color: #0E5C36;">Sedang memproses...</div> 
 
 <div id="step1" class="form-container">
   <label for="fullName">Nama Lengkap:</label>
@@ -266,6 +332,7 @@ function updateProgress(step) {
     <input type="file" id="ktp" accept="image/*" class="file-input">
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
+    <span id="upload-status-ktp" class="upload-status"></span>
   </label>
 
   <label for="kk" class="file-label-text">Unggah Foto KK</label>
@@ -273,6 +340,7 @@ function updateProgress(step) {
     <input type="file" id="kk" accept="image/*" class="file-input">
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
+    <span id="upload-status-kk" class="upload-status"></span>
   </label>
 
   <label for="npwp" class="file-label-text">Unggah Foto NPWP</label>
@@ -287,6 +355,7 @@ function updateProgress(step) {
       <span style="color: #000;">Dengan ini saya</span>
       <span style="color: #0E5C36; font-weight: 500;">menyatakan data yang saya berikan benar adanya</span>
       <span style="color: #000;">dan bersedia diproses</span>
+      <span id="upload-status-npwp" class="upload-status"></span>
     </span>
   </label>
   <div class="button-group" style="margin-top: 30px;">
@@ -334,10 +403,10 @@ function updateProgress(step) {
     });
   });
 document.addEventListener("DOMContentLoaded", () => {
-  const submitBtn = document.getElementById("submitBtn"); // tombol di form step 2
+  const submitBtn = document.getElementById("submitBtn"); 
   const confirmationPopup = document.getElementById("confirmationPopup");
   const checkAgainBtn = document.getElementById("checkAgainBtn");
-  const confirmSubmitBtn = document.getElementById("confirmSubmitBtn"); // tombol di popup
+  const confirmSubmitBtn = document.getElementById("confirmSubmitBtn"); 
 
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault();

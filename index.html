@@ -281,6 +281,37 @@ function updateProgress(step) {
     .file-input {
       display: none;
     }
+    /* Tambahan untuk outline bawah dan status */
+.custom-file-label {
+  border-bottom: 2px solid #ccc;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.custom-file-label:has(.file-input:focus),
+.custom-file-label.file-filled {
+  border-bottom-color: #0E5C36;
+}
+
+.file-text {
+  color: #999;
+  transition: color 0.3s;
+}
+
+.custom-file-label.file-filled .file-text {
+  color: #0E5C36;
+}
+
+.upload-status {
+  font-size: 14px;
+  margin-left: 6px;
+  color: #0E5C36;
+}
+
   </style>
 </head>
 
@@ -332,16 +363,16 @@ function updateProgress(step) {
     <input type="file" id="ktp" accept="image/*" class="file-input">
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
-    <span id="upload-status-ktp" class="upload-status"></span>
   </label>
+    <span id="upload-status-ktp" class="upload-status"></span>
 
   <label for="kk" class="file-label-text">Unggah Foto KK</label>
   <label class="custom-file-label">
     <input type="file" id="kk" accept="image/*" class="file-input">
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
-    <span id="upload-status-kk" class="upload-status"></span>
   </label>
+  <span id="upload-status-kk" class="upload-status"></span>
 
   <label for="npwp" class="file-label-text">Unggah Foto NPWP</label>
   <label class="custom-file-label">
@@ -349,13 +380,13 @@ function updateProgress(step) {
     <img src="https://raw.githubusercontent.com/RionAsari/reseller-form/main/css/Icon.png" class="file-icon">
     <span class="file-text">Pilih File</span>
   </label>
+  <span id="upload-status-npwp" class="upload-status"></span>
   <label style="display: flex; align-items: center; gap: 8px; line-height: 1.4; margin-top: 20px;">
     <input type="checkbox" id="consent" style="accent-color: #0E5C36; transform: translateY(-1px);">
     <span style="font-size: 12px;">
       <span style="color: #000;">Dengan ini saya</span>
       <span style="color: #0E5C36; font-weight: 500;">menyatakan data yang saya berikan benar adanya</span>
       <span style="color: #000;">dan bersedia diproses</span>
-      <span id="upload-status-npwp" class="upload-status"></span>
     </span>
   </label>
   <div class="button-group" style="margin-top: 30px;">

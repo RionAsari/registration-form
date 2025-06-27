@@ -53,13 +53,11 @@ window.nextStep = function () {
     input.classList.remove("input-error");
     if (inputLabel) inputLabel.classList.remove("label-error");
 
-    // Hapus pesan error sebelumnya jika ada
     const prevError = input.nextElementSibling;
     if (prevError && prevError.classList.contains("error-message")) {
       prevError.remove();
     }
 
-    // Validasi kosong
     if (!input.value.trim()) {
       valid = false;
       input.classList.add("input-error");
@@ -71,17 +69,31 @@ window.nextStep = function () {
       input.insertAdjacentElement("afterend", error);
     }
 
-    // Validasi angka (khusus phone dan postalCode)
-    if ((id === "phone" || id === "postalCode") && input.value.trim() && !/^\d+$/.test(input.value)) {
-      valid = false;
-      input.classList.add("input-error");
-      if (inputLabel) inputLabel.classList.add("label-error");
+if ((id === "phone" || id === "postalCode") && input.value.trim() && !/^\d+$/.test(input.value)) {
+  valid = false;
+  input.classList.add("input-error");
+  if (inputLabel) inputLabel.classList.add("label-error");
 
-      const error = document.createElement("div");
-      error.className = "error-message";
-      error.innerText = `${label} hanya boleh angka`;
-      input.insertAdjacentElement("afterend", error);
-    }
+  const error = document.createElement("div");
+  error.className = "error-message";
+  error.innerText = `${label} hanya boleh angka`;
+  input.insertAdjacentElement("afterend", error);
+}
+
+if (id === "phone" && input.value.trim()) {
+  const length = input.value.trim().length;
+  if (length < 10 || length > 14) {
+    valid = false;
+    input.classList.add("input-error");
+    if (inputLabel) inputLabel.classList.add("label-error");
+
+    const error = document.createElement("div");
+    error.className = "error-message";
+    error.innerText = `${label} harus terdiri dari 10 hingga 14 digit`;
+    input.insertAdjacentElement("afterend", error);
+  }
+}
+
   });
 
   if (!valid) return;
@@ -93,7 +105,6 @@ window.nextStep = function () {
   const postalCode = document.getElementById("postalCode").value.trim();
 
   if (!agentKey) {
-    // Buat entry baru hanya kalau agentKey belum ada
     const newRef = push(ref(database, "agent-form"));
     agentKey = newRef.key;
     set(newRef, {
@@ -109,7 +120,6 @@ window.nextStep = function () {
       updateProgress(2);
     });
   } else {
-    // Update data jika agentKey sudah ada
     update(ref(database, `agent-form/${agentKey}`), {
       fullName,
       phone,

@@ -281,36 +281,26 @@ function updateProgress(step) {
     .file-input {
       display: none;
     }
-    /* Tambahan untuk outline bawah dan status */
-.custom-file-label {
-  border-bottom: 2px solid #ccc;
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: border-color 0.3s;
-}
 
-.custom-file-label:has(.file-input:focus),
-.custom-file-label.file-filled {
-  border-bottom-color: #0E5C36;
-}
+    .custom-file-label:has(.file-input:focus),
+    .custom-file-label.file-filled {
+      border-bottom-color: #0E5C36;
+    }
 
-.file-text {
-  color: #999;
-  transition: color 0.3s;
-}
+    .file-text {
+      color: #999;
+      transition: color 0.3s;
+    }
 
-.custom-file-label.file-filled .file-text {
-  color: #0E5C36;
-}
+    .custom-file-label.file-filled .file-text {
+      color: #0E5C36;
+    }
 
-.upload-status {
-  font-size: 14px;
-  margin-left: 6px;
-  color: #0E5C36;
-}
+    .upload-status {
+      font-size: 14px;
+      margin-left: 6px;
+      color: #0E5C36;
+    }
 
   </style>
 </head>

@@ -59,6 +59,7 @@ window.nextStep = function () {
     }
 
     if (!input.value.trim()) {
+      
       valid = false;
       input.classList.add("input-error");
       if (inputLabel) inputLabel.classList.add("label-error");
@@ -90,6 +91,19 @@ if (id === "phone" && input.value.trim()) {
     const error = document.createElement("div");
     error.className = "error-message";
     error.innerText = `${label} harus terdiri dari 10 hingga 14 digit`;
+    input.insertAdjacentElement("afterend", error);
+  }
+}
+if (id === "email" && input.value.trim()) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(input.value)) {
+    valid = false;
+    input.classList.add("input-error");
+    if (inputLabel) inputLabel.classList.add("label-error");
+
+    const error = document.createElement("div");
+    error.className = "error-message";
+    error.innerText = `${label} harus berformat email yang valid`;
     input.insertAdjacentElement("afterend", error);
   }
 }
